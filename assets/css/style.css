@@ -227,6 +227,7 @@ section { padding: 88px 0; }
   object-fit: cover;
   z-index: 0;
   opacity: 0;
+  filter: brightness(1.35) saturate(1.05);
   transition: opacity 1.2s ease;
 }
 .hero-video.is-active { opacity: 1; }
@@ -236,7 +237,7 @@ section { padding: 88px 0; }
   z-index: 0;
   background:
     radial-gradient(1200px 500px at 85% -10%, rgba(201,150,46,0.20), transparent 60%),
-    linear-gradient(160deg, rgba(10,29,64,0.94), rgba(19,49,107,0.86) 55%, rgba(10,29,64,0.92));
+    linear-gradient(160deg, rgba(10,29,64,0.82), rgba(19,49,107,0.68) 55%, rgba(10,29,64,0.80));
 }
 .hero .container { position: relative; z-index: 1; }
 .hero-grid {
