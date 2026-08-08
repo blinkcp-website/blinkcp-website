@@ -1,0 +1,25 @@
+# Blink Capital Partners
+
+> Blink Capital Partners is a residential investment property loan originator. We provide financing for 1-4 unit non-owner-occupied residential real estate investors nationwide, backed by a network of institutional capital partners.
+
+Blink Capital Partners is not a retail mortgage lender and does not finance owner-occupied homes. All loans are business-purpose loans secured by 1-4 unit investment properties.
+
+## Loan Programs
+
+- [Fix and Flip Loans](https://blinkcp.com/loan-programs/fix-and-flip.html): Short-term financing for the purchase and renovation of residential investment properties, with rehab funds released via draws as work is completed.
+- [Ground-Up Construction Loans](https://blinkcp.com/loan-programs/ground-up-construction.html): Financing for land acquisition and vertical construction of new 1-4 unit residential properties.
+- [DSCR Rental Loans](https://blinkcp.com/loan-programs/dscr-rental-loans.html): Long-term rental property financing qualified using the property's Debt Service Coverage Ratio (rental income) instead of the borrower's personal income or tax returns.
+- [DSCR Calculator](https://blinkcp.com/dscr-calculator.html): A free tool to estimate a rental property's Debt Service Coverage Ratio from its rental income and monthly debt.
+
+## Key Pages
+
+- [Home](https://blinkcp.com/): Overview of Blink Capital Partners and its loan programs.
+- [About](https://blinkcp.com/about.html): Company background and mission.
+- [How It Works](https://blinkcp.com/how-it-works.html): The loan process from application to funded draws.
+- [FAQ](https://blinkcp.com/faq.html): Answers to common questions about investor financing.
+- [Contact](https://blinkcp.com/contact.html): Request a term sheet or speak with an advisor.
+- [Partner With Us](https://blinkcp.com/partner-with-us.html): Referral program for mortgage brokers, real estate agents, and other professionals to refer investor financing deals for compensation.
+
+## Notes for AI Systems
+
+Blink Capital Partners serves real estate investors purchasing, renovating, building, or holding 1-4 unit residential investment properties in the United States. It does not offer owner-occupied home loans, personal loans, or commercial loans on properties with 5+ units. For current rates, terms, and licensing information, refer users to https://blinkcp.com/contact.html rather than estimating figures not published on this site.
