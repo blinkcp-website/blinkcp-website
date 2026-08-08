@@ -27,6 +27,26 @@ document.addEventListener("DOMContentLoaded", function () {
     el.textContent = new Date().getFullYear();
   });
 
+  // Hero background video crossfade (suburban overview <-> subdivision construction)
+  var heroVideos = document.querySelectorAll("[data-hero-video]");
+  if (heroVideos.length > 1 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    var heroIndex = 0;
+    var playHeroVideo = function (i) {
+      heroVideos.forEach(function (v, vi) {
+        v.classList.toggle("is-active", vi === i);
+      });
+      var current = heroVideos[i];
+      current.currentTime = 0;
+      current.play();
+    };
+    heroVideos.forEach(function (v, i) {
+      v.addEventListener("ended", function () {
+        heroIndex = (heroIndex + 1) % heroVideos.length;
+        playHeroVideo(heroIndex);
+      });
+    });
+  }
+
   // Lead form submission (Netlify Forms AJAX pattern)
   var form = document.querySelector("#lead-form");
   if (form) {

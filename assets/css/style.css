@@ -226,7 +226,10 @@ section { padding: 88px 0; }
   height: 100%;
   object-fit: cover;
   z-index: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
 }
+.hero-video.is-active { opacity: 1; }
 .hero-overlay {
   position: absolute;
   inset: 0;
