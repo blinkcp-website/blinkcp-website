@@ -27,6 +27,22 @@ document.addEventListener("DOMContentLoaded", function () {
     el.textContent = new Date().getFullYear();
   });
 
+  // Phone number formatting: (XXX) XXX-XXXX, capped at 10 digits
+  document.querySelectorAll("[data-phone-format]").forEach(function (input) {
+    input.addEventListener("input", function () {
+      var digits = input.value.replace(/\D/g, "").slice(0, 10);
+      var formatted = digits;
+      if (digits.length > 6) {
+        formatted = "(" + digits.slice(0, 3) + ") " + digits.slice(3, 6) + "-" + digits.slice(6);
+      } else if (digits.length > 3) {
+        formatted = "(" + digits.slice(0, 3) + ") " + digits.slice(3);
+      } else if (digits.length > 0) {
+        formatted = "(" + digits;
+      }
+      input.value = formatted;
+    });
+  });
+
   // Lead form submission (Netlify Forms AJAX pattern)
   var form = document.querySelector("#lead-form");
   if (form) {
