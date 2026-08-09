@@ -43,6 +43,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // Pre-fill contact form from the homepage hero mini-form (?loan_type=...&state=...)
+  var contactLoanType = document.getElementById("loan_type");
+  var contactPropertyAddress = document.getElementById("property_address");
+  if (contactLoanType || contactPropertyAddress) {
+    var heroParams = new URLSearchParams(window.location.search);
+    var heroLoanType = heroParams.get("loan_type");
+    var heroState = heroParams.get("state");
+    if (contactLoanType && heroLoanType) {
+      Array.prototype.forEach.call(contactLoanType.options, function (opt) {
+        if (opt.value === heroLoanType) {
+          contactLoanType.value = opt.value;
+        }
+      });
+    }
+    if (contactPropertyAddress && heroState) {
+      contactPropertyAddress.value = heroState;
+    }
+  }
+
   // Lead form submission (Netlify Forms AJAX pattern)
   var form = document.querySelector("#lead-form");
   if (form) {

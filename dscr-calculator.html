@@ -118,6 +118,27 @@
           <p id="result-value" style="font-family:var(--font-head);font-size:2.6rem;font-weight:700;color:var(--navy-900);margin-bottom:8px;">—</p>
           <p id="result-message" style="margin-bottom:0;"></p>
         </div>
+
+        <div id="dscr-lead-box" style="display:none;margin-top:20px;padding:24px;border-radius:14px;border:1px solid var(--border);">
+          <h3 style="margin-bottom:4px;">Want This Analysis, Plus an Advisor's Read?</h3>
+          <p class="field-note" style="margin-bottom:16px;">We'll email you this result and a dedicated advisor will follow up with how it fits our DSCR program.</p>
+          <form id="lead-form" name="dscr-lead" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html">
+            <input type="hidden" name="form-name" value="dscr-lead">
+            <input type="hidden" name="dscr_result" id="dscr-hidden-result">
+            <input type="hidden" name="monthly_rent" id="dscr-hidden-rent">
+            <input type="hidden" name="monthly_debt_service" id="dscr-hidden-debt">
+            <p style="position:absolute;left:-9999px;" aria-hidden="true">
+              <label>Leave this field blank: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+            </p>
+            <div class="field">
+              <label for="dscr-email">Email Address</label>
+              <input type="email" id="dscr-email" name="email" placeholder="you@email.com" required>
+            </div>
+            <button type="submit" class="btn btn-navy btn-block">Email Me This Result</button>
+            <p class="field-note" style="text-align:center;margin-top:12px;">Your information is never sold. A real advisor — not a bot — will follow up.</p>
+            <p class="form-status" role="status"></p>
+          </form>
+        </div>
       </div>
 
       <div>
@@ -222,11 +243,13 @@ document.getElementById("calc-btn").addEventListener("click", function () {
   var box = document.getElementById("result-box");
   var valueEl = document.getElementById("result-value");
   var msgEl = document.getElementById("result-message");
+  var leadBox = document.getElementById("dscr-lead-box");
   box.style.display = "block";
 
   if (rent <= 0 || debtService <= 0) {
     valueEl.textContent = "—";
     msgEl.textContent = "Enter your rental income and at least one debt expense to calculate your DSCR.";
+    leadBox.style.display = "none";
     return;
   }
 
@@ -242,6 +265,11 @@ document.getElementById("calc-btn").addEventListener("click", function () {
   } else {
     msgEl.textContent = "Below typical minimums for most DSCR programs. Talk to an advisor about ways to improve cash flow or loan structure.";
   }
+
+  document.getElementById("dscr-hidden-result").value = dscr.toFixed(2);
+  document.getElementById("dscr-hidden-rent").value = rent;
+  document.getElementById("dscr-hidden-debt").value = debtService;
+  leadBox.style.display = "block";
 });
 </script>
 </body>

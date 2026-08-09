@@ -442,6 +442,22 @@ section { padding: 88px 0; }
 .spec-table td { color: var(--ink-soft); }
 .table-wrap { overflow-x: auto; }
 
+.compare-table { width: 100%; border-collapse: collapse; margin: 8px 0; background: var(--white); min-width: 640px; }
+.compare-table th, .compare-table td {
+  text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--border);
+  font-size: 0.92rem; vertical-align: top;
+}
+.compare-table thead th {
+  background: var(--navy-900); color: var(--white); font-family: var(--font-head);
+  font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.compare-table tbody th {
+  color: var(--navy-900); font-family: var(--font-head); font-size: 0.98rem; white-space: nowrap;
+}
+.compare-table td { color: var(--ink-soft); }
+.compare-table tbody tr:last-child th, .compare-table tbody tr:last-child td { border-bottom: none; }
+.compare-table .card-link { font-size: 0.85rem; }
+
 /* ---------- Breadcrumb ---------- */
 .breadcrumb { font-size: 0.85rem; color: var(--ink-faint); padding: 18px 0 0; }
 .breadcrumb a { color: var(--ink-faint); }
