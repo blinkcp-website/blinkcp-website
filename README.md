@@ -13,6 +13,28 @@ Static site (no build step). Pages: Home, About, Loan Programs (+ Fix & Flip, Gr
 7. **Business address / licensing** — currently omitted from the footer and contact page by request. Add a mailing address and NMLS/state license disclosures if/when you want them public — some states require licensing disclosure in lending advertisements, so worth a compliance check before high-volume ad spend.
 8. **After launch** — submit `sitemap.xml` in Google Search Console; consider setting up a Google Business Profile.
 
+## Deploy workflow (staging → production)
+
+Netlify's free plan runs on a monthly credit budget (300 credits), and **every push to `main` costs 15 credits as a flat "production deploy" fee** — regardless of how small the change is. Actual visitor traffic (bandwidth, requests) costs almost nothing by comparison. So the credit-efficient workflow is:
+
+1. Work on the `staging` branch, not `main`, for anything you want to test first: `git checkout staging` (or `git checkout -b staging` if it doesn't exist locally).
+2. Push to `staging` as often as you like — **branch deploys are free**, no credit cost, no limit. Netlify auto-builds it at `https://staging--spiffy-sunflower-1c2428.netlify.app`.
+3. That URL is a real, fully-functional Netlify deploy (unlike `python -m http.server` locally), so it's the only place to actually test Netlify Forms end-to-end before going live.
+4. When the batch of changes looks right, merge `staging` into `main` and push — that single merge is the one 15-credit production deploy that actually updates blinkcp.com.
+
+```
+git checkout staging
+# ...make and commit changes...
+git push origin staging          # free branch deploy, test at the staging URL above
+
+git checkout main
+git merge staging
+git push origin main             # the one production deploy (15 credits) that goes live
+git checkout staging && git merge main   # keep staging in sync for next time
+```
+
+Check remaining credits any time at Netlify → your team → Usage & billing.
+
 ## Local preview
 
 From this folder, run a local server (opening `index.html` directly won't resolve the site's absolute paths):
