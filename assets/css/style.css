@@ -320,6 +320,13 @@ section { padding: 88px 0; }
 .case-study { padding: 56px 0; border-top: 1px solid var(--border); }
 .case-study:first-of-type { border-top: none; padding-top: 0; }
 .case-study-intro { max-width: 760px; margin-bottom: 8px; }
+.case-study-photo {
+  width: 100%;
+  aspect-ratio: 16 / 8;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin: 28px 0 0;
+}
 .case-study-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
