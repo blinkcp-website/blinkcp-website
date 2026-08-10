@@ -316,6 +316,25 @@ section { padding: 88px 0; }
 .card-dark h3, .card-dark p { color: var(--white); }
 .card-dark p { color: rgba(255,255,255,0.75); }
 
+/* ---------- Case Studies ---------- */
+.case-study { padding: 56px 0; border-top: 1px solid var(--border); }
+.case-study:first-of-type { border-top: none; padding-top: 0; }
+.case-study-intro { max-width: 760px; margin-bottom: 8px; }
+.case-study-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin: 28px 0 40px;
+  padding: 28px;
+  background: var(--navy-50);
+  border-radius: var(--radius-md);
+}
+@media (max-width: 800px) { .case-study-stats { grid-template-columns: repeat(2, 1fr); } }
+.case-study-stats .stat strong {
+  display: block; font-family: var(--font-head); font-size: 1.7rem; color: var(--navy-900);
+}
+.case-study-stats .stat span { color: var(--ink-soft); font-size: 0.85rem; }
+
 /* ---------- Stats ---------- */
 .stat-bar {
   background: var(--navy-900);
