@@ -573,3 +573,19 @@ section { padding: 88px 0; }
   display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
 }
 @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ---------- Blog ---------- */
+.blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+@media (max-width: 900px) { .blog-grid { grid-template-columns: 1fr; } }
+.blog-card { display: flex; flex-direction: column; height: 100%; }
+.blog-card p { flex-grow: 1; }
+.post-date { font-size: 0.78rem; color: var(--ink-faint); font-weight: 600; letter-spacing: 0.02em; }
+.post-meta { font-size: 0.85rem; color: var(--ink-faint); margin-bottom: 8px; display: flex; gap: 8px; align-items: center; }
+.post-meta span:not(:last-child)::after { content: "·"; margin-left: 8px; }
+.article-body { max-width: 740px; }
+.article-body ul, .article-body ol { list-style: disc; padding-left: 22px; margin-bottom: 1.2em; }
+.article-body ol { list-style: decimal; }
+.article-body li { color: var(--ink-soft); margin-bottom: 0.5em; }
+.article-header { max-width: 780px; }
+.blog-footer-nav { border-top: 1px solid var(--border); padding-top: 28px; margin-top: 12px; }
+.blog-footer-nav a { font-weight: 700; color: var(--navy-800); }

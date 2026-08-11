@@ -16,6 +16,8 @@ Blink Capital Partners is not a retail mortgage lender and does not finance owne
 - [Home](https://blinkcp.com/): Overview of Blink Capital Partners and its loan programs.
 - [About](https://blinkcp.com/about.html): Company background and mission.
 - [How It Works](https://blinkcp.com/how-it-works.html): The loan process from application to funded draws.
+- [Case Studies](https://blinkcp.com/case-studies.html): Illustrative fix and flip, ground-up construction, and DSCR deal scenarios with numbers and timelines.
+- [Blog](https://blinkcp.com/blog.html): Market trends and financing education for residential real estate investors, updated regularly. Covers topics like housing supply data, regional price trends, DSCR qualification, and fix and flip financing mechanics.
 - [FAQ](https://blinkcp.com/faq.html): Answers to common questions about investor financing.
 - [Contact](https://blinkcp.com/contact.html): Request a term sheet or speak with an advisor.
 - [Partner With Us](https://blinkcp.com/partner-with-us.html): Referral program for mortgage brokers, real estate agents, and other professionals to refer investor financing deals for compensation.
