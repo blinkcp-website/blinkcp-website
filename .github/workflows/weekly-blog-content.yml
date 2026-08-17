@@ -1,0 +1,52 @@
+name: Weekly Blog Content Batch
+
+on:
+  schedule:
+    - cron: '0 23 * * 0'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  generate-blog-content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Configure git identity
+        run: |
+          git config user.name "blog-content-bot"
+          git config user.email "actions@users.noreply.github.com"
+
+      - name: Generate weekly blog content
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p "You are writing this week's blog content batch for Blink Capital Partners (blinkcp.com), a residential real estate investor loan originator (Fix & Flip, Ground-Up Construction, and DSCR Rental loans, 1-4 unit non-owner-occupied properties, nationwide). The blog exists to (1) rank in search and LLM answers for real estate investor financing topics, (2) build genuine industry credibility, and (3) generate inbound lead flow. The audience is average residential real estate investors (flippers, small developers, buy-and-hold landlords) -- write so a busy investor can read a post in under 6 minutes and walk away smarter, not marketed at.
+
+          FIRST, read these existing files to match the established pattern exactly:
+          - blog.html (the blog index page -- see the card grid structure and CTA band)
+          - blog/dscr-loans-explained.html (a representative full article -- copy its exact HTML structure: head meta/OG tags, BreadcrumbList + Article JSON-LD, header nav, page-hero, article-body prose with h2/h3/callout/checklist/spec-table classes, closing CTA band, footer)
+          - assets/css/style.css (design tokens and existing classes: .prose, .callout, .checklist, .spec-table, .article-body, .post-meta, .blog-card, .blog-grid -- reuse these, do not invent new classes unless truly necessary)
+          - llms.txt and sitemap.xml (see how existing pages are referenced)
+          - List files already in blog/ so you do not repeat a topic that's already been covered
+
+          YOUR TASK:
+          1. Check out origin/staging (git fetch origin staging), then create or reset a branch named blog-content from origin/staging so it always starts from the current live blog content, not from an old blog-content branch.
+          2. Use WebSearch to research 3 to 4 CURRENT, REAL topics for this week's batch, mixing generic evergreen financing education and specific, timely, data-driven topics (housing supply data, price trends, rate trends, flipping activity) -- always cite real, current figures from your search results and name the source in the text. NEVER fabricate a statistic, rate, or figure.
+          3. Write each post as a new file at blog/[descriptive-slug].html, following the exact structure and CSS classes of blog/dscr-loans-explained.html. Each post needs: unique meta title/description, canonical URL, BreadcrumbList + Article JSON-LD (use today's date), an eyebrow category, a post-meta line, a lead paragraph, 4-6 H2 sections with real substance, a closing CTA band, and a blog-footer-nav link to a relevant loan-programs or dscr-calculator page.
+          4. Add a new card for each post at the TOP of the grid in blog.html (most recent first), matching the exact card markup pattern already there.
+          5. Add each new post URL to sitemap.xml (priority 0.7, following the existing blog entries pattern).
+          6. Do NOT modify llms.txt and do NOT touch any files outside blog.html, sitemap.xml, and new files under blog/.
+          7. Commit everything to the blog-content branch with a clear commit message, then run: git push --force-with-lease origin blog-content. This repo's GITHUB_TOKEN already has write access in this workflow, so a plain git push will work -- do not attempt any GitHub API/MCP tool for this, just use git directly. Do NOT open a pull request and do NOT merge to staging or main -- this branch is a staging area for human review before anything goes live.
+          8. End with a short plain-text summary listing each post's title, category, and the real data sources you cited." \
+            --allowedTools "Bash,Read,Write,Edit,Glob,Grep,WebSearch,WebFetch" \
+            --permission-mode acceptEdits

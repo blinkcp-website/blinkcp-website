@@ -1,0 +1,44 @@
+name: Weekly Instagram Content Batch
+
+on:
+  schedule:
+    - cron: '0 22 * * 0'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  generate-social-content:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Configure git identity
+        run: |
+          git config user.name "social-content-bot"
+          git config user.email "actions@users.noreply.github.com"
+
+      - name: Generate weekly Instagram content
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude -p "You are preparing next week's Instagram content batch for Blink Capital Partners (blinkcp.com), a residential real estate investor loan originator. They lend on Fix & Flip, Ground-Up Construction, and DSCR Rental loans. Their Instagram audience is house flippers, small developers, and rental property (buy-and-hold) investors. The brand voice is confident, straightforward, and educational -- a thought leader helping investors move faster on deals, not a hard-sell lender.
+
+          Context you should use: this repo contains the live marketing site (index.html, loan-programs.html, dscr-calculator.html, case-studies.html with 3 illustrative deals: a fix-and-flip, a ground-up construction, and a DSCR rental). Pull real facts, numbers, and terminology from loan-programs.html and case-studies.html so content stays accurate and on-brand -- never invent rates, terms, or numbers that aren't grounded in the site content.
+
+          Your task:
+          1. git fetch origin social-content, then create or reset a branch named social-content from origin/social-content if it exists, otherwise from origin/main.
+          2. Create a new dated file at social-content/YYYY-MM-DD-batch.md (use next Monday's date as the batch week start) containing a ready-to-post content batch for that week: 3-4 Instagram posts/reels concepts appropriate for that week's rotation (mix of educational carousel, case-study/deal spotlight, market/thought-leadership hot-take, and a light engagement or myth-busting post -- vary week to week based on what's already been posted in prior batch files in social-content/ if any exist). For each post include: post type/format, a scroll-stopping hook line, full caption copy with a clear CTA driving to blinkcp.com or DM, and 5-8 relevant hashtags from a real-estate-investor hashtag mix.
+          3. Keep captions concise, avoid corporate jargon, write like a knowledgeable peer talking to investors, not an ad.
+          4. Commit the new file to the social-content branch, then run: git push --force-with-lease origin social-content. This repo's GITHUB_TOKEN already has write access in this workflow, so a plain git push will work -- do not attempt any GitHub API/MCP tool for this, just use git directly. Do not open a pull request and do not touch any other files or branches -- this branch is just a content staging area for manual human review before anything gets posted.
+          5. At the end, output a short plain-text summary of what was drafted." \
+            --allowedTools "Bash,Read,Write,Edit,Glob,Grep" \
+            --permission-mode acceptEdits
