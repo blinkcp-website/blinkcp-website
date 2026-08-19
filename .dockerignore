@@ -1,8 +1,6 @@
 .git
 .gitignore
 README.md
-Dockerfile
-nginx.conf.template
 .dockerignore
 * - Copy.*
 */* - Copy.*
