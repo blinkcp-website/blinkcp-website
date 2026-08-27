@@ -140,13 +140,17 @@ section { padding: 88px 0; }
 }
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand img { height: 104px; width: auto; }
-.main-nav { display: flex; align-items: center; gap: 6px; }
+.main-nav { display: flex; align-items: center; gap: 2px; }
 .main-nav a {
   color: var(--navy-900);
   font-weight: 600;
   font-size: 0.95rem;
-  padding: 10px 14px;
+  padding: 10px 12px;
   border-radius: 8px;
+}
+.main-nav > a,
+.main-nav .dropdown > a {
+  white-space: nowrap;
 }
 .main-nav a:hover { background: var(--navy-50); }
 .main-nav .dropdown { position: relative; }
