@@ -70,120 +70,424 @@
   </section>
 
   <section>
-    <div class="container two-col">
+    <div class="container two-col two-col-wide">
       <div class="form-card">
         <h2 style="margin-bottom:6px;">Submit Your Deal</h2>
-        <p style="margin-bottom:28px;">Give us the numbers and a dedicated advisor will review your deal and follow up fast. Fields marked * are required.</p>
+        <p style="margin-bottom:24px;">Answer a few quick questions about your deal and a dedicated advisor will review it and follow up fast. Fields marked * are required.</p>
 
-        <form id="lead-form" name="loan-inquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html">
-          <input type="hidden" name="form-name" value="loan-inquiry">
-          <p style="position:absolute;left:-9999px;" aria-hidden="true">
-            <label>Leave this field blank: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
-          </p>
+        <div class="wizard-steps" id="wizard-steps">
+          <div class="wizard-step-indicator active" data-step-indicator="0"><span class="step-num">1</span><span class="step-label">Product</span></div>
+          <div class="wizard-step-indicator" data-step-indicator="1"><span class="step-num">2</span><span class="step-label">Property</span></div>
+          <div class="wizard-step-indicator" data-step-indicator="2"><span class="step-num">3</span><span class="step-label">Entity</span></div>
+          <div class="wizard-step-indicator" data-step-indicator="3"><span class="step-num">4</span><span class="step-label">Borrower</span></div>
+          <div class="wizard-step-indicator" data-step-indicator="4"><span class="step-num">5</span><span class="step-label">Summary</span></div>
+        </div>
 
-          <h3 style="margin-bottom:14px;">Your Information</h3>
-          <div class="form-row">
-            <div class="field">
-              <label for="first_name">First Name *</label>
-              <input type="text" id="first_name" name="first_name" required>
-            </div>
-            <div class="field">
-              <label for="last_name">Last Name *</label>
-              <input type="text" id="last_name" name="last_name" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="field">
-              <label for="email">Email *</label>
-              <input type="email" id="email" name="email" required>
-            </div>
-            <div class="field">
-              <label for="phone">Phone *</label>
-              <input type="tel" id="phone" name="phone" required data-phone-format placeholder="(555) 123-4567" maxlength="14" inputmode="numeric">
-            </div>
-          </div>
-          <div class="field">
-            <label for="property_address">Property Address *</label>
-            <input type="text" id="property_address" name="property_address" placeholder="Street, City, State" required>
-          </div>
+        <div id="wizard-body">
+          <form id="lead-form" name="loan-inquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html">
+            <input type="hidden" name="form-name" value="loan-inquiry">
+            <input type="hidden" name="product" id="product-field" value="">
+            <p style="position:absolute;left:-9999px;" aria-hidden="true">
+              <label>Leave this field blank: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+            </p>
 
-          <h3 style="margin:28px 0 14px;">The Deal</h3>
-          <div class="form-row">
-            <div class="field">
-              <label for="loan_type">Loan Type *</label>
-              <select id="loan_type" name="loan_type" required>
-                <option value="">Select one</option>
-                <option>Fix &amp; Flip</option>
-                <option>Ground-Up Construction</option>
-                <option>DSCR Rental Loan</option>
-                <option>Not Sure Yet</option>
-              </select>
+            <!-- Step 0: Select Product -->
+            <div class="wizard-step active" data-step="0">
+              <h3 style="margin-bottom:14px;">What are you financing?</h3>
+              <div class="product-grid">
+                <button type="button" class="product-card" data-product="fix_and_flip">
+                  <h3>Fix &amp; Flip</h3>
+                  <p>Purchase and/or renovate, then sell or rent a non-owner occupied home.</p>
+                </button>
+                <button type="button" class="product-card" data-product="ground_up_construction">
+                  <h3>Ground-Up Construction</h3>
+                  <p>Build a new 1-4 unit home from the ground up.</p>
+                </button>
+                <button type="button" class="product-card" data-product="dscr_rental">
+                  <h3>DSCR Rental Loan</h3>
+                  <p>Purchase or refinance a non-owner occupied rental property.</p>
+                </button>
+              </div>
             </div>
-            <div class="field">
-              <label for="purchase_price">Purchase Price (or original cost, if already owned)</label>
-              <input type="text" id="purchase_price" name="purchase_price" placeholder="e.g. $250,000">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="field">
-              <label for="purchase_date">Purchase Date (if already owned)</label>
-              <input type="text" id="purchase_date" name="purchase_date" placeholder="MM/YYYY">
-            </div>
-            <div class="field">
-              <label for="rehab_spent">Rehab/Construction Spent to Date (if already owned)</label>
-              <input type="text" id="rehab_spent" name="rehab_spent" placeholder="e.g. $30,000">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="field">
-              <label for="rehab_budget">Remaining Rehab/Construction Budget</label>
-              <input type="text" id="rehab_budget" name="rehab_budget" placeholder="e.g. $80,000">
-            </div>
-            <div class="field">
-              <label for="arv">After Repair Value (ARV)</label>
-              <input type="text" id="arv" name="arv" placeholder="e.g. $425,000">
-            </div>
-          </div>
-          <div class="field">
-            <label for="payoff_amount">Payoff Amount (if refinancing an existing loan)</label>
-            <input type="text" id="payoff_amount" name="payoff_amount" placeholder="e.g. $180,000">
-          </div>
 
-          <h3 style="margin:28px 0 14px;">Borrower Profile</h3>
-          <div class="form-row">
-            <div class="field">
-              <label for="borrower_experience">Deals Completed in the Last 3 Years</label>
-              <input type="text" id="borrower_experience" name="borrower_experience" placeholder="e.g. 3">
-            </div>
-            <div class="field">
-              <label for="fico">Estimated FICO Score</label>
-              <input type="text" id="fico" name="fico" placeholder="e.g. 700">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="field">
-              <label for="re_license">Real Estate Licenses (GC, agent/broker, property manager, etc.)</label>
-              <input type="text" id="re_license" name="re_license" placeholder="If none, leave blank">
-            </div>
-            <div class="field">
-              <label for="permits">Permits Pulled or in Hand?</label>
-              <select id="permits" name="permits">
-                <option value="">Select one</option>
-                <option>Yes</option>
-                <option>No</option>
-                <option>Not Applicable</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <label for="message">Anything Else We Should Know?</label>
-            <textarea id="message" name="message" rows="4" placeholder="Timeline, liens, title issues, or anything else that would help us underwrite your deal faster."></textarea>
-          </div>
+            <!-- Step 1: Property Information -->
+            <div class="wizard-step" data-step="1">
+              <h3 style="margin-bottom:14px;">Property Information</h3>
 
-          <button type="submit" class="btn btn-gold btn-block">Submit Deal</button>
-          <p class="field-note" style="text-align:center;margin-top:12px;">Your information is never sold. A real advisor — not a bot — will follow up.</p>
-          <p class="form-status" role="status"></p>
-        </form>
+              <!-- Fix & Flip -->
+              <div class="product-fields" data-product-fields="fix_and_flip" hidden>
+                <div class="field">
+                  <label for="ff_property_address">Property Address *</label>
+                  <input type="text" id="ff_property_address" name="property_address" placeholder="Street, City, State" required>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="ff_property_type">Property Type *</label>
+                    <select id="ff_property_type" name="property_type" required>
+                      <option value="">Select one</option>
+                      <option>Single Family</option>
+                      <option>Duplex</option>
+                      <option>Triplex</option>
+                      <option>Quadruplex</option>
+                      <option>Warrantable Condominium</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label>Purchase or Already Own? *</label>
+                    <div class="radio-group">
+                      <label class="radio-pill"><input type="radio" name="ownership_status" value="purchase" required checked><span>Purchase</span></label>
+                      <label class="radio-pill"><input type="radio" name="ownership_status" value="already_owns" required><span>Already Own It</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="ff_purchase_price">Purchase Price (or original cost, if already owned) *</label>
+                  <input type="text" id="ff_purchase_price" name="purchase_price" placeholder="e.g. $250,000" required>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="ff_purchase_date">Purchase Date</label>
+                    <input type="text" id="ff_purchase_date" name="purchase_date" placeholder="MM/YYYY">
+                  </div>
+                  <div class="field">
+                    <label for="ff_rehab_spent">Rehab Spent to Date</label>
+                    <input type="text" id="ff_rehab_spent" name="rehab_spent" placeholder="e.g. $30,000">
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="ff_payoff_amount">Payoff Amount (if refinancing an existing loan)</label>
+                  <input type="text" id="ff_payoff_amount" name="payoff_amount" placeholder="e.g. $180,000">
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label>Is this an arm's-length transaction? *</label>
+                    <div class="radio-group">
+                      <label class="radio-pill"><input type="radio" name="arms_length" value="yes" required checked><span>Yes</span></label>
+                      <label class="radio-pill"><input type="radio" name="arms_length" value="no" required><span>No</span></label>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label>Is there a seller credit? *</label>
+                    <div class="radio-group">
+                      <label class="radio-pill"><input type="radio" name="seller_credit" value="no" required checked><span>No</span></label>
+                      <label class="radio-pill"><input type="radio" name="seller_credit" value="yes" required><span>Yes</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="ff_sourcing">How is the property being sourced? *</label>
+                  <select id="ff_sourcing" name="sourcing" required>
+                    <option value="">Select one</option>
+                    <option>MLS</option>
+                    <option>Off-Market / Private Sale</option>
+                    <option>Wholesaler</option>
+                    <option>Auction / Foreclosure</option>
+                    <option>Short Sale</option>
+                    <option>Estate Sale</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="ff_rehab_budget">Remaining Rehab Budget *</label>
+                    <input type="text" id="ff_rehab_budget" name="rehab_budget" placeholder="e.g. $80,000" required>
+                  </div>
+                  <div class="field">
+                    <label for="ff_arv">After Repair Value (ARV) *</label>
+                    <input type="text" id="ff_arv" name="arv" placeholder="e.g. $425,000" required>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="ff_exit_strategy">Exit Strategy *</label>
+                  <select id="ff_exit_strategy" name="exit_strategy" required>
+                    <option value="">Select one</option>
+                    <option value="sell">Sell</option>
+                    <option value="refinance">Refinance &amp; Hold</option>
+                    <option value="not_sure">Not Sure Yet</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Ground-Up Construction -->
+              <div class="product-fields" data-product-fields="ground_up_construction" hidden>
+                <div class="field">
+                  <label for="gc_property_address">Property / Land Address *</label>
+                  <input type="text" id="gc_property_address" name="property_address" placeholder="Street, City, State" required>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="gc_property_type">Property Type *</label>
+                    <select id="gc_property_type" name="property_type" required>
+                      <option value="">Select one</option>
+                      <option>Single Family</option>
+                      <option>Duplex</option>
+                      <option>Triplex</option>
+                      <option>Quadruplex</option>
+                      <option>Warrantable Condominium</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label>Purchase or Already Own the Land? *</label>
+                    <div class="radio-group">
+                      <label class="radio-pill"><input type="radio" name="ownership_status" value="purchase" required checked><span>Purchase</span></label>
+                      <label class="radio-pill"><input type="radio" name="ownership_status" value="already_owns" required><span>Already Own It</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="gc_purchase_price">Purchase Price (or land value, if already owned) *</label>
+                  <input type="text" id="gc_purchase_price" name="purchase_price" placeholder="e.g. $90,000" required>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="gc_purchase_date">Purchase Date</label>
+                    <input type="text" id="gc_purchase_date" name="purchase_date" placeholder="MM/YYYY">
+                  </div>
+                  <div class="field">
+                    <label for="gc_rehab_spent">Construction Spent to Date</label>
+                    <input type="text" id="gc_rehab_spent" name="rehab_spent" placeholder="e.g. $30,000">
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="gc_payoff_amount">Payoff Amount (if refinancing an existing loan)</label>
+                  <input type="text" id="gc_payoff_amount" name="payoff_amount" placeholder="e.g. $80,000">
+                </div>
+                <div class="field">
+                  <label>Are you dividing this property into multiple lots? *</label>
+                  <div class="radio-group">
+                    <label class="radio-pill"><input type="radio" name="subdivide_lots" value="no" required checked><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="subdivide_lots" value="yes" required><span>Yes</span></label>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="gc_rehab_budget">Construction Budget *</label>
+                    <input type="text" id="gc_rehab_budget" name="rehab_budget" placeholder="e.g. $320,000" required>
+                  </div>
+                  <div class="field">
+                    <label for="gc_arv">After-Completion Value (ARV) *</label>
+                    <input type="text" id="gc_arv" name="arv" placeholder="e.g. $520,000" required>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="gc_permits">Permits Pulled or in Hand? *</label>
+                  <select id="gc_permits" name="permits" required>
+                    <option value="">Select one</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                    <option>Not Applicable</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="gc_exit_strategy">Exit Strategy *</label>
+                  <select id="gc_exit_strategy" name="exit_strategy" required>
+                    <option value="">Select one</option>
+                    <option value="sell">Sell</option>
+                    <option value="refinance">Refinance &amp; Hold</option>
+                    <option value="not_sure">Not Sure Yet</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- DSCR Rental -->
+              <div class="product-fields" data-product-fields="dscr_rental" hidden>
+                <div class="field">
+                  <label for="dscr_property_address">Property Address *</label>
+                  <input type="text" id="dscr_property_address" name="property_address" placeholder="Street, City, State" required>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="dscr_property_type">Property Type *</label>
+                    <select id="dscr_property_type" name="property_type" required>
+                      <option value="">Select one</option>
+                      <option>Single Family</option>
+                      <option>Duplex</option>
+                      <option>Triplex</option>
+                      <option>Quadruplex</option>
+                      <option>Warrantable Condominium</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="dscr_loan_purpose">Loan Purpose *</label>
+                    <select id="dscr_loan_purpose" name="loan_purpose" required>
+                      <option value="">Select one</option>
+                      <option value="purchase">Purchase</option>
+                      <option value="rate_term_refi">Rate &amp; Term Refinance</option>
+                      <option value="cashout_refi">Cash-Out Refinance</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="dscr_purchase_price">Purchase Price *</label>
+                  <input type="text" id="dscr_purchase_price" name="purchase_price" placeholder="e.g. $250,000" required>
+                </div>
+                <div class="field">
+                  <label for="dscr_payoff_amount">Current Loan Payoff Amount</label>
+                  <input type="text" id="dscr_payoff_amount" name="payoff_amount" placeholder="e.g. $180,000">
+                </div>
+                <div class="field">
+                  <label>Are there Section 8 leases on this property? *</label>
+                  <div class="radio-group">
+                    <label class="radio-pill"><input type="radio" name="section_8" value="no" required checked><span>No</span></label>
+                    <label class="radio-pill"><input type="radio" name="section_8" value="yes" required><span>Yes</span></label>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="dscr_as_is_value">Estimated As-Is Value *</label>
+                    <input type="text" id="dscr_as_is_value" name="as_is_value" placeholder="e.g. $260,000" required>
+                  </div>
+                  <div class="field">
+                    <label for="dscr_gross_rent">Gross Monthly Rent *</label>
+                    <input type="text" id="dscr_gross_rent" name="gross_rent" placeholder="e.g. $2,200" required>
+                  </div>
+                </div>
+                <h4 style="margin:20px 0 10px;font-size:0.92rem;color:var(--navy-800);">Annual Operating Expenses</h4>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="dscr_annual_taxes">Property Taxes *</label>
+                    <input type="text" id="dscr_annual_taxes" name="annual_taxes" placeholder="e.g. $3,600" required>
+                  </div>
+                  <div class="field">
+                    <label for="dscr_annual_insurance">Insurance *</label>
+                    <input type="text" id="dscr_annual_insurance" name="annual_insurance" placeholder="e.g. $1,800" required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="dscr_annual_hoa">HOA Dues (if applicable)</label>
+                    <input type="text" id="dscr_annual_hoa" name="annual_hoa" placeholder="e.g. $600">
+                  </div>
+                  <div class="field">
+                    <label for="dscr_annual_utilities">Utilities (if landlord-paid)</label>
+                    <input type="text" id="dscr_annual_utilities" name="annual_utilities" placeholder="e.g. $0">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="dscr_annual_repairs">Repairs &amp; Maintenance Reserve</label>
+                    <input type="text" id="dscr_annual_repairs" name="annual_repairs" placeholder="e.g. $1,200">
+                  </div>
+                  <div class="field">
+                    <label for="dscr_annual_mgmt_fee">Property Management Fee</label>
+                    <input type="text" id="dscr_annual_mgmt_fee" name="annual_mgmt_fee" placeholder="e.g. $2,100">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="dscr_total_income">Total Annual Income</label>
+                    <input type="text" id="dscr_total_income" name="total_income" readonly>
+                  </div>
+                  <div class="field">
+                    <label for="dscr_total_expenses">Total Annual Expenses</label>
+                    <input type="text" id="dscr_total_expenses" name="total_expenses" readonly>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="dscr_noi">Estimated Annual NOI</label>
+                  <input type="text" id="dscr_noi" name="noi" readonly>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Entity Information -->
+            <div class="wizard-step" data-step="2">
+              <h3 style="margin-bottom:14px;">Entity Information</h3>
+              <div class="field">
+                <label>Purchasing As *</label>
+                <div class="radio-group">
+                  <label class="radio-pill"><input type="radio" name="purchasing_as" value="individual" required checked><span>Individual</span></label>
+                  <label class="radio-pill"><input type="radio" name="purchasing_as" value="entity" required><span>Business Entity</span></label>
+                </div>
+              </div>
+              <div id="entity-fields" hidden>
+                <div class="form-row">
+                  <div class="field">
+                    <label for="entity_name">Entity Name</label>
+                    <input type="text" id="entity_name" name="entity_name" placeholder="e.g. Main Street Holdings LLC">
+                  </div>
+                  <div class="field">
+                    <label for="entity_type">Entity Type</label>
+                    <select id="entity_type" name="entity_type">
+                      <option value="">Select one</option>
+                      <option>LLC</option>
+                      <option>Corporation</option>
+                      <option>Partnership</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <p class="field-note">Full entity documentation (EIN, formation docs) is collected later by your advisor once your deal moves forward — no need to provide it here.</p>
+            </div>
+
+            <!-- Step 3: Borrower Information -->
+            <div class="wizard-step" data-step="3">
+              <h3 style="margin-bottom:14px;">Your Information</h3>
+              <div class="form-row">
+                <div class="field">
+                  <label for="first_name">First Name *</label>
+                  <input type="text" id="first_name" name="first_name" required>
+                </div>
+                <div class="field">
+                  <label for="last_name">Last Name *</label>
+                  <input type="text" id="last_name" name="last_name" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="field">
+                  <label for="email">Email *</label>
+                  <input type="email" id="email" name="email" required>
+                </div>
+                <div class="field">
+                  <label for="phone">Phone *</label>
+                  <input type="tel" id="phone" name="phone" required data-phone-format placeholder="(555) 123-4567" maxlength="14" inputmode="numeric">
+                </div>
+              </div>
+
+              <h3 style="margin:28px 0 14px;">Borrower Profile</h3>
+              <div class="form-row">
+                <div class="field">
+                  <label for="borrower_experience">Deals Completed in the Last 3 Years</label>
+                  <input type="text" id="borrower_experience" name="borrower_experience" placeholder="e.g. 3">
+                </div>
+                <div class="field">
+                  <label for="fico">Estimated FICO Score</label>
+                  <input type="text" id="fico" name="fico" placeholder="e.g. 700">
+                </div>
+              </div>
+              <div class="field">
+                <label for="re_license">Real Estate Licenses (GC, agent/broker, property manager, etc.)</label>
+                <input type="text" id="re_license" name="re_license" placeholder="If none, leave blank">
+              </div>
+              <div class="field">
+                <label for="message">Anything Else We Should Know?</label>
+                <textarea id="message" name="message" rows="4" placeholder="Timeline, liens, title issues, or anything else that would help us underwrite your deal faster."></textarea>
+              </div>
+            </div>
+
+            <!-- Step 4: Summary -->
+            <div class="wizard-step" data-step="4">
+              <h3 style="margin-bottom:14px;">Review Your Submission</h3>
+              <div id="summary-content"></div>
+            </div>
+
+            <div class="wizard-nav" id="wizard-nav">
+              <button type="button" class="btn btn-outline-navy" id="wizard-back">Back</button>
+              <button type="button" class="btn btn-gold" id="wizard-next">Continue</button>
+              <button type="submit" class="btn btn-gold" id="wizard-submit" style="display:none;">Submit Deal</button>
+            </div>
+            <p class="field-note" style="text-align:center;margin-top:12px;">Your information is never sold. A real advisor — not a bot — will follow up.</p>
+            <p class="form-status" role="status"></p>
+          </form>
+        </div>
+
+        <div class="thank-you-panel" id="thank-you-panel" style="display:none;">
+          <div class="icon-badge">✓</div>
+          <h2>Thanks — we've got it!</h2>
+          <p>A dedicated advisor will review your deal and follow up with your term sheet — usually within 2 hours.</p>
+          <a href="/" class="btn btn-navy">Back to Home</a>
+        </div>
       </div>
 
       <div>
@@ -249,26 +553,221 @@
 
 <script src="/assets/js/main.js"></script>
 <script>
-document.getElementById("lead-form").addEventListener("submit", function () {
-  var msgEl = document.getElementById("message");
-  var parts = [];
-  function add(label, id) {
-    var el = document.getElementById(id);
-    if (el && el.value) { parts.push(label + ": " + el.value); }
+document.addEventListener("DOMContentLoaded", function () {
+  var form = document.getElementById("lead-form");
+  if (!form) return;
+
+  var productField = document.getElementById("product-field");
+  var productCards = Array.prototype.slice.call(document.querySelectorAll(".product-card"));
+  var productBlocks = Array.prototype.slice.call(document.querySelectorAll("[data-product-fields]"));
+  var wizardSteps = Array.prototype.slice.call(document.querySelectorAll(".wizard-step"));
+  var stepIndicators = Array.prototype.slice.call(document.querySelectorAll(".wizard-step-indicator"));
+  var wizardNav = document.getElementById("wizard-nav");
+  var backBtn = document.getElementById("wizard-back");
+  var nextBtn = document.getElementById("wizard-next");
+  var submitBtn = document.getElementById("wizard-submit");
+  var summaryContent = document.getElementById("summary-content");
+  var wizardBody = document.getElementById("wizard-body");
+  var thankYouPanel = document.getElementById("thank-you-panel");
+  var formCard = form.closest(".form-card");
+  var currentStep = 0;
+
+  function setFieldVisibility(el, visible) {
+    if (!el) return;
+    var wrapper = el.closest(".field");
+    if (wrapper) wrapper.hidden = !visible;
+    el.disabled = !visible;
   }
-  add("Purchase Price", "purchase_price");
-  add("Purchase Date", "purchase_date");
-  add("Rehab Spent to Date", "rehab_spent");
-  add("Remaining Rehab Budget", "rehab_budget");
-  add("ARV", "arv");
-  add("Payoff Amount", "payoff_amount");
-  add("Deals Completed (Last 3 Years)", "borrower_experience");
-  add("Estimated FICO", "fico");
-  add("RE Licenses", "re_license");
-  add("Permits", "permits");
-  if (msgEl.value) { parts.push("Notes: " + msgEl.value); }
-  msgEl.value = parts.join("\n");
-}, true);
+
+  // ---------- Product select (step 0) ----------
+  productBlocks.forEach(function (block) {
+    block.querySelectorAll("input, select, textarea").forEach(function (el) {
+      el.disabled = true;
+    });
+  });
+
+  productCards.forEach(function (card) {
+    card.addEventListener("click", function () {
+      var product = card.dataset.product;
+      productField.value = product;
+      productCards.forEach(function (c) { c.classList.toggle("active", c === card); });
+      productBlocks.forEach(function (block) {
+        var isActive = block.dataset.productFields === product;
+        block.hidden = !isActive;
+        block.querySelectorAll("input, select, textarea").forEach(function (el) {
+          el.disabled = !isActive;
+        });
+      });
+      if (product === "fix_and_flip") refreshOwnership(document.getElementById("ff_property_address").closest(".product-fields"));
+      if (product === "ground_up_construction") refreshOwnership(document.getElementById("gc_property_address").closest(".product-fields"));
+      if (product === "dscr_rental") refreshDscr();
+      goToStep(1);
+    });
+  });
+
+  // ---------- Fix & Flip / Ground-Up: ownership_status conditional fields ----------
+  function refreshOwnership(block) {
+    var checked = block.querySelector('input[name="ownership_status"]:checked');
+    var alreadyOwns = !!checked && checked.value === "already_owns";
+    ["purchase_date", "rehab_spent", "payoff_amount"].forEach(function (name) {
+      setFieldVisibility(block.querySelector('[name="' + name + '"]'), alreadyOwns);
+    });
+  }
+  document.querySelectorAll('.product-fields input[name="ownership_status"]').forEach(function (radio) {
+    radio.addEventListener("change", function () {
+      refreshOwnership(radio.closest(".product-fields"));
+    });
+  });
+
+  // ---------- Entity step: purchasing_as conditional fields ----------
+  var entityFields = document.getElementById("entity-fields");
+  function refreshEntity() {
+    var checked = document.querySelector('input[name="purchasing_as"]:checked');
+    var isEntity = !!checked && checked.value === "entity";
+    entityFields.hidden = !isEntity;
+    entityFields.querySelectorAll("input, select").forEach(function (el) { el.disabled = !isEntity; });
+  }
+  document.querySelectorAll('input[name="purchasing_as"]').forEach(function (radio) {
+    radio.addEventListener("change", refreshEntity);
+  });
+  refreshEntity();
+
+  // ---------- DSCR: loan purpose + auto-computed NOI ----------
+  var dscrLoanPurpose = document.getElementById("dscr_loan_purpose");
+  var dscrPurchasePrice = document.getElementById("dscr_purchase_price");
+  var dscrPayoff = document.getElementById("dscr_payoff_amount");
+  var dscrExpenseFields = ["gross_rent", "annual_taxes", "annual_insurance", "annual_hoa", "annual_utilities", "annual_repairs", "annual_mgmt_fee"]
+    .map(function (name) { return document.getElementById("dscr_" + name); });
+
+  function parseCurrency(value) {
+    var n = Number(String(value || "").replace(/[^0-9.]/g, ""));
+    return isFinite(n) ? n : 0;
+  }
+  function formatCurrency(n) {
+    return "$" + Math.round(n).toLocaleString("en-US");
+  }
+  function computeNOI() {
+    var grossRent = parseCurrency(document.getElementById("dscr_gross_rent").value);
+    var totalIncome = grossRent * 12;
+    var totalExpenses = ["annual_taxes", "annual_insurance", "annual_hoa", "annual_utilities", "annual_repairs", "annual_mgmt_fee"]
+      .reduce(function (sum, name) { return sum + parseCurrency(document.getElementById("dscr_" + name).value); }, 0);
+    document.getElementById("dscr_total_income").value = totalIncome ? formatCurrency(totalIncome) : "";
+    document.getElementById("dscr_total_expenses").value = totalExpenses ? formatCurrency(totalExpenses) : "";
+    document.getElementById("dscr_noi").value = (totalIncome || totalExpenses) ? formatCurrency(totalIncome - totalExpenses) : "";
+  }
+  dscrExpenseFields.forEach(function (el) { el.addEventListener("input", computeNOI); });
+
+  function refreshDscr() {
+    var purpose = dscrLoanPurpose.value;
+    setFieldVisibility(dscrPurchasePrice, purpose === "purchase" || purpose === "");
+    setFieldVisibility(dscrPayoff, purpose === "rate_term_refi" || purpose === "cashout_refi");
+    computeNOI();
+  }
+  dscrLoanPurpose.addEventListener("change", refreshDscr);
+
+  // ---------- Step navigation ----------
+  function activeStep() {
+    return wizardSteps.filter(function (el) { return Number(el.dataset.step) === currentStep; })[0];
+  }
+
+  function validateStep(stepEl) {
+    var invalid = Array.prototype.slice.call(stepEl.querySelectorAll(":required:not(:disabled):invalid"));
+    if (invalid.length) {
+      invalid[0].reportValidity();
+      return false;
+    }
+    return true;
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function fieldSummary(fieldEl) {
+    var label = fieldEl.querySelector("label");
+    var labelText = label ? label.textContent.replace(/\*/g, "").trim() : "";
+    var select = fieldEl.querySelector("select:not(:disabled)");
+    if (select) {
+      if (!select.value) return null;
+      return [labelText, select.options[select.selectedIndex].text];
+    }
+    var checkedRadio = fieldEl.querySelector('input[type="radio"]:checked:not(:disabled)');
+    if (checkedRadio) {
+      var span = checkedRadio.nextElementSibling;
+      return [labelText, span ? span.textContent : checkedRadio.value];
+    }
+    var input = fieldEl.querySelector('input:not([type="radio"]):not([type="hidden"]):not(:disabled), textarea:not(:disabled)');
+    if (input) {
+      if (!input.value) return null;
+      return [labelText, input.value];
+    }
+    return null;
+  }
+
+  function buildSummary() {
+    var groups = [
+      ["Property", document.querySelector('.wizard-step[data-step="1"] [data-product-fields]:not([hidden])'), 1],
+      ["Entity Information", document.querySelector('.wizard-step[data-step="2"]'), 2],
+      ["Your Information", document.querySelector('.wizard-step[data-step="3"]'), 3],
+    ];
+    var html = "";
+    groups.forEach(function (group) {
+      var title = group[0], container = group[1], stepNum = group[2];
+      if (!container) return;
+      var rows = "";
+      container.querySelectorAll(".field").forEach(function (f) {
+        var s = fieldSummary(f);
+        if (s && s[1]) rows += '<div class="summary-row"><dt>' + escapeHtml(s[0]) + "</dt><dd>" + escapeHtml(s[1]) + "</dd></div>";
+      });
+      if (rows) {
+        html += '<div class="summary-block"><h4>' + escapeHtml(title) + ' <a href="#" data-goto-step="' + stepNum + '">Edit</a></h4><div>' + rows + "</div></div>";
+      }
+    });
+    summaryContent.innerHTML = html;
+    summaryContent.querySelectorAll("[data-goto-step]").forEach(function (link) {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        goToStep(Number(link.dataset.gotoStep));
+      });
+    });
+  }
+
+  function goToStep(n) {
+    currentStep = n;
+    wizardSteps.forEach(function (el) { el.classList.toggle("active", Number(el.dataset.step) === n); });
+    stepIndicators.forEach(function (el, i) {
+      el.classList.toggle("active", i === n);
+      el.classList.toggle("done", i < n);
+    });
+    wizardNav.style.display = n === 0 ? "none" : "flex";
+    nextBtn.style.display = n === 4 ? "none" : "inline-flex";
+    submitBtn.style.display = n === 4 ? "inline-flex" : "none";
+    if (n === 4) buildSummary();
+    formCard.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  nextBtn.addEventListener("click", function () {
+    if (!validateStep(activeStep())) return;
+    goToStep(Math.min(currentStep + 1, 4));
+  });
+  backBtn.addEventListener("click", function () {
+    goToStep(Math.max(currentStep - 1, 0));
+  });
+
+  wizardNav.style.display = "none";
+
+  // ---------- Success: swap wizard for the Thank You panel ----------
+  var statusEl = form.querySelector(".form-status");
+  new MutationObserver(function () {
+    if (statusEl.classList.contains("success")) {
+      wizardBody.style.display = "none";
+      document.getElementById("wizard-steps").style.display = "none";
+      thankYouPanel.style.display = "block";
+    }
+  }).observe(statusEl, { attributes: true, attributeFilter: ["class"] });
+});
 </script>
 </body>
 </html>
