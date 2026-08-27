@@ -6,6 +6,8 @@ server {
 
     error_page 404 /404.html;
 
+    add_header Cache-Control "no-cache";
+
     location / {
         try_files $uri $uri/ =404;
     }
