@@ -62,7 +62,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Lead form submission (Netlify Forms AJAX pattern)
+  // Lead form submission -> CRM public form API (replaces Netlify Forms)
+  var CRM_FORM_ENDPOINTS = {
+    "loan-inquiry": "https://crm.blinkcp.com/api/public/contact",
+    "partner-application": "https://crm.blinkcp.com/api/public/partner",
+  };
+
   var form = document.querySelector("#lead-form");
   if (form) {
     form.addEventListener("submit", function (e) {
@@ -73,12 +78,15 @@ document.addEventListener("DOMContentLoaded", function () {
       submitBtn.disabled = true;
       submitBtn.textContent = "Submitting...";
 
+      var formName = form.querySelector('[name="form-name"]');
+      var endpoint = CRM_FORM_ENDPOINTS[formName ? formName.value : ""];
+
       var params = new URLSearchParams();
       new FormData(form).forEach(function (value, key) {
         params.append(key, value);
       });
 
-      fetch("/", {
+      fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: params.toString(),
