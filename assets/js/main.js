@@ -43,22 +43,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Pre-fill contact form from the homepage hero mini-form (?loan_type=...&state=...)
-  var contactLoanType = document.getElementById("loan_type");
-  var contactPropertyAddress = document.getElementById("property_address");
-  if (contactLoanType || contactPropertyAddress) {
+  // Pre-fill the "Get Funded" wizard from the homepage hero mini-form (?loan_type=...&state=...)
+  var heroProductCards = document.querySelectorAll(".product-card");
+  if (heroProductCards.length) {
     var heroParams = new URLSearchParams(window.location.search);
     var heroLoanType = heroParams.get("loan_type");
     var heroState = heroParams.get("state");
-    if (contactLoanType && heroLoanType) {
-      Array.prototype.forEach.call(contactLoanType.options, function (opt) {
-        if (opt.value === heroLoanType) {
-          contactLoanType.value = opt.value;
-        }
-      });
+    if (heroLoanType) {
+      var matchingCard = document.querySelector('.product-card[data-product="' + heroLoanType + '"]');
+      if (matchingCard) matchingCard.click();
     }
-    if (contactPropertyAddress && heroState) {
-      contactPropertyAddress.value = heroState;
+    if (heroState) {
+      document.querySelectorAll('input[name="property_address"]').forEach(function (input) {
+        input.value = heroState;
+      });
     }
   }
 

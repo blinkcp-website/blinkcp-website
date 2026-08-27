@@ -447,6 +447,126 @@ section { padding: 88px 0; }
 .form-status.success { color: var(--success); display: block; }
 .form-status.error { color: var(--error); display: block; }
 
+/* ---------- Get Funded Wizard ---------- */
+.two-col-wide { grid-template-columns: 2.1fr 1fr; }
+@media (max-width: 900px) { .two-col-wide { grid-template-columns: 1fr; } }
+
+.wizard-steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.wizard-step-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-faint);
+}
+.wizard-step-indicator .step-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--navy-50);
+  color: var(--navy-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  flex-shrink: 0;
+}
+.wizard-step-indicator.active { color: var(--navy-900); }
+.wizard-step-indicator.active .step-num { background: var(--navy-900); color: var(--white); }
+.wizard-step-indicator.done .step-num { background: var(--gold-500); color: var(--white); }
+@media (max-width: 700px) {
+  .wizard-step-indicator .step-label { display: none; }
+}
+
+.wizard-step { display: none; }
+.wizard-step.active { display: block; }
+
+.product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 700px) { .product-grid { grid-template-columns: 1fr; } }
+.product-card {
+  text-align: left;
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  font-family: inherit;
+}
+.product-card:hover { border-color: var(--navy-600); }
+.product-card.active { border-color: var(--navy-800); box-shadow: 0 0 0 3px var(--navy-100); }
+.product-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+.product-card p { font-size: 0.86rem; margin-bottom: 0; color: var(--ink-faint); }
+
+.radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
+.radio-pill { position: relative; cursor: pointer; }
+.radio-pill input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.radio-pill span {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  transition: all 0.15s ease;
+}
+.radio-pill input:checked + span {
+  background: var(--navy-900);
+  border-color: var(--navy-900);
+  color: var(--white);
+}
+.radio-pill input:focus-visible + span { outline: 2px solid var(--navy-600); outline-offset: 2px; }
+
+.wizard-nav { display: flex; justify-content: space-between; gap: 14px; margin-top: 28px; }
+
+.summary-block { margin-bottom: 24px; }
+.summary-block h4 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--navy-800);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.summary-block h4 a { font-size: 0.78rem; text-transform: none; letter-spacing: normal; font-weight: 600; }
+.summary-row { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; font-size: 0.92rem; border-bottom: 1px solid var(--border-soft); }
+.summary-row dt { color: var(--ink-faint); margin: 0; }
+.summary-row dd { margin: 0; font-weight: 600; color: var(--ink); text-align: right; }
+
+.thank-you-panel { text-align: center; padding: 40px 10px; }
+.thank-you-panel .icon-badge {
+  margin: 0 auto 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--navy-50);
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+.thank-you-panel p { max-width: 420px; margin-left: auto; margin-right: auto; }
+
 /* ---------- CTA Band ---------- */
 .cta-band {
   background: linear-gradient(135deg, var(--navy-900), var(--navy-700));
