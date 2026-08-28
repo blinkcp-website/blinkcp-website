@@ -192,6 +192,11 @@ section { padding: 88px 0; }
 }
 
 @media (max-width: 940px) {
+  /* backdrop-filter on an ancestor makes Safari/iOS treat this fixed nav
+     panel as positioned relative to .site-header instead of the viewport,
+     confining it to the header's own height. Drop the filter on mobile so
+     the off-canvas menu actually spans the viewport. */
+  .site-header { backdrop-filter: none; }
   .main-nav {
     position: fixed;
     inset: 68px 0 0 0;
@@ -651,7 +656,13 @@ section { padding: 88px 0; }
   gap: 40px;
   margin-bottom: 44px;
 }
-@media (max-width: 800px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 800px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  /* The fixed height (with the global img{max-width:100%} rule) squished
+     this logo horizontally once its column got narrower than its natural
+     width. Cap by width instead and let height scale proportionally. */
+  .footer-brand img { height: auto; width: 130px; }
+}
 .footer-grid h5 {
   color: var(--white); font-size: 0.85rem; letter-spacing: 0.06em;
   text-transform: uppercase; margin-bottom: 16px;
