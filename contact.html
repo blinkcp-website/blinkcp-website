@@ -734,7 +734,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  var STEP_NAMES = ["product", "property", "entity", "borrower", "summary"];
+  var deepestStep = 0;
+
   function goToStep(n) {
+    // Track forward progress only, so going Back doesn't inflate step counts.
+    // Drop-off between these events shows which step is losing paid traffic.
+    if (n > deepestStep) {
+      deepestStep = n;
+      if (typeof trackEvent === "function") {
+        trackEvent("form_step", {
+          form_type: "loan-inquiry",
+          step_number: n + 1,
+          step_name: STEP_NAMES[n] || String(n),
+          loan_product: productField && productField.value ? productField.value : "unspecified",
+        });
+      }
+    }
     currentStep = n;
     wizardSteps.forEach(function (el) { el.classList.toggle("active", Number(el.dataset.step) === n); });
     stepIndicators.forEach(function (el, i) {
