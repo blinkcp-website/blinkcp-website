@@ -1,0 +1,62 @@
+# Auto-deploy to Cloud Run on push.
+#
+# Two triggers share this file, each passing a different _SERVICE:
+#   main    -> _SERVICE=blinkcp-website          (production, blinkcp.com)
+#   staging -> _SERVICE=blinkcp-website-staging  (staging, *.run.app only)
+#
+# The default below is the STAGING service deliberately: a trigger created
+# without an explicit _SERVICE substitution deploys to staging, never to the
+# live site.
+#
+# Setup notes are in README.md under "Deploy workflow".
+
+substitutions:
+  _SERVICE: blinkcp-website-staging
+  _REGION: us-east1
+  # Created automatically by earlier `gcloud run deploy --source .` runs.
+  _REPO: cloud-run-source-deploy
+
+steps:
+  # Tag with the commit SHA so every deploy is traceable to a commit, and
+  # with :latest for convenience when pulling the most recent build.
+  - id: build
+    name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_SERVICE}:${SHORT_SHA}
+      - -t
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_SERVICE}:latest
+      - .
+
+  # Pushed in an explicit step rather than via the top-level `images:` field,
+  # because `images:` uploads only after ALL steps finish -- the deploy step
+  # below would then reference a tag that does not exist yet.
+  - id: push
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - --all-tags
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_SERVICE}
+
+  - id: deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/${_SERVICE}:${SHORT_SHA}
+      - --region=${_REGION}
+      - --allow-unauthenticated
+      - --min-instances=0
+      - --max-instances=2
+      - --quiet
+
+# Required when the build runs as a user-specified service account and no
+# logs bucket is configured -- without it the build fails before step 1 with
+# "build.service_account requires logs_bucket or CLOUD_LOGGING_ONLY".
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: 900s

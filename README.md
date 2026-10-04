@@ -29,6 +29,34 @@ Unlike Netlify, Cloud Run has no per-deploy credit cost, so deploy to staging as
    This is the step that actually updates `blinkcp.com`.
 5. Keep `staging` in sync: `git checkout staging && git merge main`.
 
+### Automatic deploys (Cloud Build)
+
+`cloudbuild.yaml` in the repo root deploys on push, so the weekly blog
+automation actually reaches the web. Two triggers share the one file:
+
+| Trigger branch | `_SERVICE` substitution | Deploys to |
+| --- | --- | --- |
+| `^main$` | `blinkcp-website` | production, blinkcp.com |
+| `^staging$` | `blinkcp-website-staging` | staging `*.run.app` only |
+
+The default `_SERVICE` in the file is the **staging** service, so a trigger
+created without an explicit substitution can never deploy to the live site
+by accident.
+
+One-time setup, in the `blinkcp-crm` GCP project:
+
+1. Cloud Build -> Triggers -> Connect Repository, and authorise the
+   `blinkcp-website/blinkcp-website` GitHub repo.
+2. Create the two triggers above. Type: push to branch; configuration:
+   Cloud Build configuration file (`cloudbuild.yaml`); add the `_SERVICE`
+   substitution variable for each.
+3. Grant the Cloud Build service account `roles/run.admin` and
+   `roles/iam.serviceAccountUser`, or the deploy step fails with a
+   permissions error on its first run.
+
+The manual `gcloud run deploy` commands above still work and remain the
+fallback if a trigger is ever disabled.
+
 If a fresh Cloud Run service is ever recreated, it may need a one-time manual step in the Console (Cloud Run → service → Security tab → "Allow unauthenticated invocations") since public-access IAM bindings can't always be set from the CLI.
 
 ## Local preview
