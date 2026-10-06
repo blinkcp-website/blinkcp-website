@@ -38,7 +38,50 @@ jobs:
           1. git fetch origin social-content, then create or reset a branch named social-content from origin/social-content if it exists, otherwise from origin/main.
           2. Create a new dated file at social-content/YYYY-MM-DD-batch.md (use next Monday's date as the batch week start) containing a ready-to-post content batch for that week: 3-4 Instagram posts/reels concepts appropriate for that week's rotation (mix of educational carousel, case-study/deal spotlight, market/thought-leadership hot-take, and a light engagement or myth-busting post -- vary week to week based on what's already been posted in prior batch files in social-content/ if any exist). For each post include: post type/format, a scroll-stopping hook line, full caption copy with a clear CTA driving to blinkcp.com or DM, and 5-8 relevant hashtags from a real-estate-investor hashtag mix.
           3. Keep captions concise, avoid corporate jargon, write like a knowledgeable peer talking to investors, not an ad.
+          3b. ALSO write social-content/YYYY-MM-DD-slides.json (same date as the batch file) so the carousel slides can be rendered to images automatically. Shape:
+          {\"posts\":[{\"name\":\"YYYY-MM-DD-postN-short-slug\",\"slides\":[ ... ]}]}
+          Include an entry only for posts that are carousels or multi-slide statics -- skip single-image and reel concepts. Each slide object uses one of four types, and the text must match the slide breakdown you wrote in the .md file:
+            {\"type\":\"hook\",\"eyebrow\":\"Loan program or category\",\"headline\":\"the hook, <br> allowed\",\"body\":\"one supporting line\",\"swipe\":\"Swipe →\"}
+            {\"type\":\"num\",\"n\":1,\"headline\":\"short point\",\"body\":\"one or two sentences\"}
+            {\"type\":\"stat\",\"eyebrow\":\"framing label\",\"headline\":\"80% LTV\",\"body\":\"what it refers to\"}
+            {\"type\":\"cta\",\"headline\":\"the ask\",\"body\":\"supporting line\",\"url\":\"blinkcp.com\"}
+          Keep headlines short -- they render at large sizes on a 1080x1350 slide. Use \"stat\" only when the headline is a short figure. Every post must end with a \"cta\" slide. Do not invent figures; pull them from the site content as above.
           4. Commit the new file to the social-content branch, then run: git push --force-with-lease origin social-content. This repo's GITHUB_TOKEN already has write access in this workflow, so a plain git push will work -- do not attempt any GitHub API/MCP tool for this, just use git directly. Do not open a pull request and do not touch any other files or branches -- this branch is just a content staging area for manual human review before anything gets posted.
           5. At the end, output a short plain-text summary of what was drafted." \
             --allowedTools "Bash,Read,Write,Edit,Glob,Grep" \
             --permission-mode acceptEdits
+
+      # Renders the slide JSON into 1080x1350 PNGs using the same markup and CSS
+      # as tools/carousel/index.html, so CI output matches the browser tool.
+      # Without this the batches stay briefs and nothing is postable.
+      - name: Render carousel slides to PNG
+        run: |
+          set -euo pipefail
+          git fetch origin social-content
+          git checkout social-content
+
+          SLIDES=$(ls -1 social-content/*-slides.json 2>/dev/null | sort | tail -1 || true)
+          if [ -z "$SLIDES" ]; then
+            echo "No slides JSON found - nothing to render."
+            exit 0
+          fi
+          echo "Rendering $SLIDES"
+
+          # render.mjs and index.html live on the default branch; bring just those
+          # two files across without disturbing the content branch.
+          git checkout "${{ github.sha }}" -- tools/carousel/
+
+          npm install --no-save puppeteer@23
+          OUTDIR="social-content/$(basename "$SLIDES" -slides.json)-slides"
+          node tools/carousel/render.mjs "$SLIDES" "$OUTDIR"
+
+          git rm -r --cached tools/carousel >/dev/null 2>&1 || true
+          rm -rf tools node_modules package-lock.json package.json
+          git add "$OUTDIR"
+          if git diff --cached --quiet; then
+            echo "No new slide images."
+          else
+            git commit -m "Render carousel slides for $(basename "$SLIDES" -slides.json)"
+            git push --force-with-lease origin social-content
+            echo "Pushed $(ls -1 "$OUTDIR" | wc -l) slide image(s)."
+          fi

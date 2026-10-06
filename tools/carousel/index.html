@@ -105,9 +105,15 @@
    Slide data. Paste the slide breakdown from a social-content batch
    file here. Types: hook | num | stat | cta
    --------------------------------------------------------------- */
-const POST_NAME = "2026-10-12-post1-dscr-dial";
+/* The headless renderer (render.mjs) sets window.__SLIDE_DATA__ before this
+   script runs, so CI and this page render through the exact same markup and
+   CSS. Opened directly in a browser there is no injected data, so the example
+   below is used. */
+const INJECTED = (typeof window !== "undefined" && window.__SLIDE_DATA__) || null;
 
-const SLIDES = [
+const POST_NAME = INJECTED ? INJECTED.postName : "2026-10-12-post1-dscr-dial";
+
+const SLIDES = INJECTED ? INJECTED.slides : [
   { type:"hook", eyebrow:"DSCR Rental",
     headline:"Your DSCR isn’t pass/fail.<br>It’s a dial.",
     body:"And where you land on it changes what you can actually borrow.",
