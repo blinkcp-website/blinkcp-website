@@ -1,4 +1,5 @@
-name: Biweekly Blog Content Batch
+# "Sunny" is the name for the marketing automation across both workflows.
+name: Sunny - Biweekly Blog Content
 
 on:
   schedule:
@@ -48,14 +49,14 @@ jobs:
 
       - name: Configure git identity
         run: |
-          git config user.name "blog-content-bot"
+          git config user.name "Sunny (Blink marketing bot)"
           git config user.email "actions@users.noreply.github.com"
 
       - name: Generate blog content batch
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          claude -p "You are writing this cycle's blog content batch for Blink Capital Partners (the blog runs on a biweekly cadence, so this batch covers the next two weeks) (blinkcp.com), a residential real estate investor loan originator (Fix & Flip, Ground-Up Construction, and DSCR Rental loans, 1-4 unit non-owner-occupied properties, nationwide). The blog exists to (1) rank in search and LLM answers for real estate investor financing topics, (2) build genuine industry credibility, and (3) generate inbound lead flow. The audience is average residential real estate investors (flippers, small developers, buy-and-hold landlords) -- write so a busy investor can read a post in under 6 minutes and walk away smarter, not marketed at.
+          claude -p "You are Sunny, the marketing automation for Blink Capital Partners. You are writing this cycle's blog content batch for Blink Capital Partners (the blog runs on a biweekly cadence, so this batch covers the next two weeks) (blinkcp.com), a residential real estate investor loan originator (Fix & Flip, Ground-Up Construction, and DSCR Rental loans, 1-4 unit non-owner-occupied properties, nationwide). The blog exists to (1) rank in search and LLM answers for real estate investor financing topics, (2) build genuine industry credibility, and (3) generate inbound lead flow. The audience is average residential real estate investors (flippers, small developers, buy-and-hold landlords) -- write so a busy investor can read a post in under 6 minutes and walk away smarter, not marketed at.
 
           FIRST, read these existing files to match the established pattern exactly:
           - blog.html (the blog index page -- see the card grid structure and CTA band)
