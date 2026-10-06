@@ -24,34 +24,31 @@ Merge fields: `{first_name}`, `{advisor}`.
 
 ---
 
-## Email 1 — Day 0 · The promise
+## Email 1 — Day 0 · The question
 
-**Subject:** The two-hour rule
-**Alt subject:** How fast do you actually need an answer?
-**Preview:** Most lenders take a week to tell you no.
+**Subject:** Are you under contract on your next investment property?
+**Alt subject:** Under contract? Here's how fast you'll know.
+**Preview:** A term sheet from Blink, typically within two hours.
 
 > {first_name} —
 >
-> Here's the thing nobody says out loud about investor financing: the problem
-> usually isn't the rate. It's the waiting.
+> Are you under contract on your next investment property?
 >
-> You find a deal. You send it in. Then you sit for four days wondering whether
-> to keep looking — and by the time someone comes back, the seller has three
-> other offers.
+> If you are, the question that matters isn't the rate. It's how fast you know
+> it's financeable.
 >
-> We issue a term sheet, with loan amount and structure, **typically within two
-> hours**. Not because we're heroes. Because knowing fast is worth more to you
-> than almost anything else we could offer.
+> **Blink gets you a term sheet — loan amount and structure — typically within
+> two hours.**
 >
-> That's the whole pitch. Over the next couple of weeks I'll send you three
-> deals we funded and exactly how the numbers worked — no pitch, just the math.
+> Over the next few weeks I'll send three deals we funded, with the real
+> numbers. If one of yours lands before then: 631.353.7022.
 >
-> If a deal lands before then, you know where to find me.
->
-> — {advisor}, Blink Capital Partners · 631.353.7022
+> — {advisor}, Blink Capital Partners
 
-*Sets one expectation and makes a promise about what's coming, which is what
-earns the next open.*
+*Roughly 70 words. The question does the work: it's answerable in one beat, and
+either answer ("yes" or "not yet") leaves the two-hour promise sitting there.
+Naming Blink in the opening line and the sign-off means the brand lands even
+for someone who only skims.*
 
 ---
 
