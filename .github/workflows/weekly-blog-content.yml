@@ -1,7 +1,12 @@
-name: Weekly Blog Content Batch
+name: Biweekly Blog Content Batch
 
 on:
   schedule:
+    # Fires every Sunday; the cadence gate below drops the odd ISO weeks so the
+    # batch actually runs every other Sunday. Cron cannot express "every two
+    # weeks" on its own -- and the usual '1-7,15-21' trick is wrong here,
+    # because POSIX cron ORs day-of-month with day-of-week, which would fire
+    # far more often rather than less.
     - cron: '0 23 * * 0'
   workflow_dispatch: {}
 
@@ -9,7 +14,27 @@ permissions:
   contents: write
 
 jobs:
+  cadence:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+    steps:
+      - id: check
+        run: |
+          WEEK=$(date -u +%V)            # ISO week, 01-53
+          # 10# forces base 10 so weeks like 08/09 aren't read as octal.
+          if [ "$(( 10#$WEEK % 2 ))" -eq 0 ]; then
+            echo "ISO week $WEEK is even - running the blog batch."
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ISO week $WEEK is odd - skipping (blog batch is biweekly)."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
   generate-blog-content:
+    needs: cadence
+    # A manual run always goes ahead, regardless of which week it is.
+    if: needs.cadence.outputs.run == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,11 +51,11 @@ jobs:
           git config user.name "blog-content-bot"
           git config user.email "actions@users.noreply.github.com"
 
-      - name: Generate weekly blog content
+      - name: Generate blog content batch
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          claude -p "You are writing this week's blog content batch for Blink Capital Partners (blinkcp.com), a residential real estate investor loan originator (Fix & Flip, Ground-Up Construction, and DSCR Rental loans, 1-4 unit non-owner-occupied properties, nationwide). The blog exists to (1) rank in search and LLM answers for real estate investor financing topics, (2) build genuine industry credibility, and (3) generate inbound lead flow. The audience is average residential real estate investors (flippers, small developers, buy-and-hold landlords) -- write so a busy investor can read a post in under 6 minutes and walk away smarter, not marketed at.
+          claude -p "You are writing this cycle's blog content batch for Blink Capital Partners (the blog runs on a biweekly cadence, so this batch covers the next two weeks) (blinkcp.com), a residential real estate investor loan originator (Fix & Flip, Ground-Up Construction, and DSCR Rental loans, 1-4 unit non-owner-occupied properties, nationwide). The blog exists to (1) rank in search and LLM answers for real estate investor financing topics, (2) build genuine industry credibility, and (3) generate inbound lead flow. The audience is average residential real estate investors (flippers, small developers, buy-and-hold landlords) -- write so a busy investor can read a post in under 6 minutes and walk away smarter, not marketed at.
 
           FIRST, read these existing files to match the established pattern exactly:
           - blog.html (the blog index page -- see the card grid structure and CTA band)
