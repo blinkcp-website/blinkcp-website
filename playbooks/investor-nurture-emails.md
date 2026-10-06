@@ -26,29 +26,32 @@ Merge fields: `{first_name}`, `{advisor}`.
 
 ## Email 1 — Day 0 · The question
 
-**Subject:** Are you under contract on your next investment property?
-**Alt subject:** Under contract? Here's how fast you'll know.
-**Preview:** A term sheet from Blink, typically within two hours.
+**Subject:** Under Contract? Now it's time for terms.
+**Preview:** An investor-minded lender, with term sheets in two hours.
 
 > {first_name} —
 >
 > Are you under contract on your next investment property?
 >
-> If you are, the question that matters isn't the rate. It's how fast you know
-> it's financeable.
+> Go with a lender with an investor mindset to meet your expectations and
+> timing — that's Blink. We offer competitive terms and term sheets sent
+> within 2 hours.
 >
-> **Blink gets you a term sheet — loan amount and structure — typically within
-> two hours.**
+> You focus on what matters most, rehabbing or building. We'll take care of
+> the lending.
 >
-> Over the next few weeks I'll send three deals we funded, with the real
-> numbers. If one of yours lands before then: 631.353.7022.
->
-> — {advisor}, Blink Capital Partners
+> — {advisor}, Blink Capital Partners · 631.353.7022
 
-*Roughly 70 words. The question does the work: it's answerable in one beat, and
-either answer ("yes" or "not yet") leaves the two-hour promise sitting there.
-Naming Blink in the opening line and the sign-off means the brand lands even
-for someone who only skims.*
+**One thing to decide before this sends.** The site says term sheets come
+"typically within 2 hours" and "often within 2 hours" — hedged, everywhere it
+appears. This email drops the hedge and states it flat. That's a stronger
+promise than the site makes, and it's in writing to a prospect. Changing
+"sent within 2 hours" to "sent typically within 2 hours" costs one word and
+makes the email consistent with every other place you say it.
+
+*Optional closing line, if you want the next four emails to arrive expected
+rather than cold — drop it in above the sign-off:*
+"Over the next few weeks I'll send three deals we funded, with the real numbers."
 
 ---
 
