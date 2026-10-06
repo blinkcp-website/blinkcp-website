@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carousel Renderer — Blink Capital Partners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  /* Brand tokens lifted from assets/css/style.css so slides match the site exactly. */
+  :root {
+    --navy-950:#0a1d40; --navy-900:#0f2755; --navy-800:#13316b; --navy-700:#1c4189;
+    --gold-500:#c9962e; --gold-400:#dcae4d; --gold-100:#faf1de;
+    --white:#ffffff;
+    --font-head:"Poppins","Segoe UI",Arial,sans-serif;
+    --font-body:"Inter","Segoe UI",Arial,sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#eef1f7; font-family:var(--font-body); color:#171b24; }
+
+  .toolbar {
+    position:sticky; top:0; z-index:10; background:var(--navy-950); color:#fff;
+    padding:14px 20px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+  }
+  .toolbar h1 { font-family:var(--font-head); font-size:15px; margin:0 12px 0 0; font-weight:600; }
+  .toolbar button {
+    font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;
+    background:var(--gold-500); color:#1a1300; border:0; border-radius:8px; padding:9px 16px;
+  }
+  .toolbar button.ghost { background:transparent; color:#fff; border:1px solid rgba(255,255,255,.35); }
+  .toolbar .note { font-size:12px; opacity:.72; margin-left:auto; }
+
+  .grid { display:flex; flex-wrap:wrap; gap:28px; padding:28px; align-items:flex-start; }
+  .slot { width:360px; }
+  .slot .cap { font-size:12px; font-weight:600; color:#4a5164; margin:0 0 8px; display:flex; justify-content:space-between; }
+  .slot .cap button { font-size:11px; padding:3px 9px; border-radius:6px; border:1px solid #c7cedd; background:#fff; cursor:pointer; }
+  /* Preview is a CSS-scaled view of the real 1080x1350 slide. Export uses full size. */
+  .shrink { width:360px; height:450px; overflow:hidden; border-radius:10px; box-shadow:0 8px 24px rgba(15,39,85,.14); }
+  .shrink > .slide { transform:scale(0.3333); transform-origin:top left; }
+
+  /* ---- The slide itself: exact Instagram portrait 1080x1350 ---- */
+  .slide {
+    width:1080px; height:1350px; position:relative; overflow:hidden;
+    background:linear-gradient(155deg, var(--navy-900) 0%, var(--navy-950) 70%);
+    color:var(--white); padding:96px 88px; display:flex; flex-direction:column;
+  }
+  .slide.light { background:var(--white); color:var(--navy-950); }
+  .slide.gold  { background:linear-gradient(155deg, var(--gold-500) 0%, var(--gold-400) 100%); color:#1a1300; }
+
+  .rule { width:120px; height:8px; background:var(--gold-500); border-radius:4px; margin-bottom:44px; flex:none; }
+  .slide.gold .rule { background:var(--navy-950); }
+
+  .eyebrow {
+    font-size:26px; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--gold-400); margin:0 0 28px; flex:none;
+  }
+  .slide.light .eyebrow { color:var(--gold-600,#a97e1f); }
+  .slide.gold .eyebrow { color:rgba(26,19,0,.68); }
+
+  .headline {
+    font-family:var(--font-head); font-weight:700; font-size:82px; line-height:1.1;
+    margin:0; letter-spacing:-.02em;
+  }
+  .headline.sm { font-size:64px; }
+  .body {
+    font-size:38px; line-height:1.45; margin:32px 0 0; font-weight:400;
+    color:rgba(255,255,255,.88); max-width:84%;
+  }
+  .slide.light .body { color:#4a5164; }
+  .slide.gold .body { color:rgba(26,19,0,.82); }
+
+  /* Content block centres itself in the space above the footer, so slides with
+     a short line don't leave a dead gap under it. */
+  .content { flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; }
+
+  .num {
+    font-family:var(--font-head); font-weight:700; font-size:40px; color:var(--navy-950);
+    background:var(--gold-500); width:96px; height:96px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; margin-bottom:40px; flex:none;
+  }
+
+  .foot { display:flex; align-items:center; justify-content:space-between; flex:none; }
+  .foot img { height:52px; }
+  .foot .url { font-size:28px; font-weight:600; letter-spacing:.02em; opacity:.85; }
+
+  .swipe { font-size:28px; font-weight:600; color:var(--gold-400); letter-spacing:.04em; }
+  .slide.gold .swipe { color:rgba(26,19,0,.7); }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <h1>Carousel Renderer</h1>
+  <button onclick="exportAll()">Download all slides (PNG)</button>
+  <button class="ghost" onclick="location.reload()">Reset</button>
+  <span class="note">1080 &times; 1350 &middot; Instagram portrait 4:5 &middot; edit SLIDES in this file to load a different post</span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+/* ---------------------------------------------------------------
+   Slide data. Paste the slide breakdown from a social-content batch
+   file here. Types: hook | num | stat | cta
+   --------------------------------------------------------------- */
+const POST_NAME = "2026-10-12-post1-dscr-dial";
+
+const SLIDES = [
+  { type:"hook", eyebrow:"DSCR Rental",
+    headline:"Your DSCR isn’t pass/fail.<br>It’s a dial.",
+    body:"And where you land on it changes what you can actually borrow.",
+    swipe:"Swipe →" },
+
+  { type:"num", n:1, headline:"Below 1.00",
+    body:"Rent doesn’t fully cover the payment on its own. Still financeable — but it changes your structure." },
+
+  { type:"num", n:2, headline:"1.00 – 1.24",
+    body:"The common qualifying range for most DSCR programs. Rent covers the payment." },
+
+  { type:"num", n:3, headline:"1.25 and up",
+    body:"Strong territory. This is where leverage tends to get most favorable." },
+
+  { type:"stat", eyebrow:"What that buys you",
+    headline:"80% LTV",
+    body:"on a purchase or rate-and-term refinance.<br>75% LTV on a cash-out refi." },
+
+  { type:"cta", headline:"Know your ratio before you shop lenders.",
+    body:"Free DSCR calculator — link in bio.",
+    url:"blinkcp.com" }
+];
+
+/* --------------------------------------------------------------- */
+
+const LOGO = "../../assets/img/logo-white.png";
+const LOGO_DARK = "../../assets/img/logo.png";
+
+function slideHTML(s, i, total) {
+  const dark = s.type === "cta";
+  const cls = s.type === "cta" ? "slide gold" : "slide";
+  let inner = "";
+
+  if (s.type === "hook") {
+    inner = `<div class="content">
+        <div class="rule"></div>
+        ${s.eyebrow ? `<p class="eyebrow">${s.eyebrow}</p>` : ""}
+        <h2 class="headline">${s.headline}</h2>
+        ${s.body ? `<p class="body">${s.body}</p>` : ""}
+      </div>
+      <div class="foot">
+        <img src="${LOGO}" alt="">
+        <span class="swipe">${s.swipe || "Swipe →"}</span>
+      </div>`;
+  } else if (s.type === "num") {
+    inner = `<div class="content">
+        <div class="num">${s.n}</div>
+        <h2 class="headline sm">${s.headline}</h2>
+        ${s.body ? `<p class="body">${s.body}</p>` : ""}
+      </div>
+      <div class="foot"><img src="${LOGO}" alt=""><span class="url">${i+1} / ${total}</span></div>`;
+  } else if (s.type === "stat") {
+    inner = `<div class="content">
+        <div class="rule"></div>
+        ${s.eyebrow ? `<p class="eyebrow">${s.eyebrow}</p>` : ""}
+        <h2 class="headline" style="font-size:150px;">${s.headline}</h2>
+        ${s.body ? `<p class="body">${s.body}</p>` : ""}
+      </div>
+      <div class="foot"><img src="${LOGO}" alt=""><span class="url">${i+1} / ${total}</span></div>`;
+  } else { /* cta */
+    inner = `<div class="content">
+        <div class="rule"></div>
+        <h2 class="headline sm">${s.headline}</h2>
+        ${s.body ? `<p class="body">${s.body}</p>` : ""}
+      </div>
+      <div class="foot">
+        <img src="${LOGO_DARK}" alt="">
+        <span class="url">${s.url || "blinkcp.com"}</span>
+      </div>`;
+  }
+  return `<div class="${cls}" id="slide-${i}">${inner}</div>`;
+}
+
+const grid = document.getElementById("grid");
+SLIDES.forEach((s, i) => {
+  const slot = document.createElement("div");
+  slot.className = "slot";
+  slot.innerHTML = `<p class="cap"><span>Slide ${i+1}</span>
+      <button onclick="exportOne(${i})">PNG</button></p>
+    <div class="shrink">${slideHTML(s, i, SLIDES.length)}</div>`;
+  grid.appendChild(slot);
+});
+
+async function exportOne(i) {
+  const el = document.getElementById("slide-" + i);
+  // Un-scale for capture, then restore, so the PNG is true 1080x1350.
+  const prev = el.style.transform;
+  el.style.transform = "none";
+  const canvas = await html2canvas(el, { width:1080, height:1350, scale:1, backgroundColor:null, useCORS:true });
+  el.style.transform = prev;
+  const a = document.createElement("a");
+  a.download = `${POST_NAME}-slide${String(i+1).padStart(2,"0")}.png`;
+  a.href = canvas.toDataURL("image/png");
+  a.click();
+}
+
+async function exportAll() {
+  for (let i = 0; i < SLIDES.length; i++) {
+    await exportOne(i);
+    await new Promise(r => setTimeout(r, 350)); // let each download register
+  }
+}
+</script>
+</body>
+</html>
