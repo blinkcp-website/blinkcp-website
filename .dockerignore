@@ -4,3 +4,5 @@ README.md
 .dockerignore
 * - Copy.*
 */* - Copy.*
+tools/
+playbooks/

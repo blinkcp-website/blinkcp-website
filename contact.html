@@ -477,6 +477,16 @@
               <button type="button" class="btn btn-gold" id="wizard-next">Continue</button>
               <button type="submit" class="btn btn-gold" id="wizard-submit" style="display:none;">Submit Deal</button>
             </div>
+            <!-- TCPA: texting a lead about loan products is marketing, which needs
+                 prior express written consent. Unchecked by default and optional --
+                 submitting the form does not depend on it, so consent stays
+                 unbundled from the service request. The CRM route sweeps unknown
+                 fields into deal_details, so sms_consent is recorded automatically
+                 as the proof of consent. Wording should be attorney-reviewed. -->
+            <label class="consent" id="sms-consent-row" style="display:none;gap:10px;align-items:flex-start;margin-top:18px;font-size:13px;line-height:1.5;color:var(--ink-soft);">
+              <input type="checkbox" name="sms_consent" value="yes" style="margin-top:3px;flex:none;">
+              <span>I agree to receive calls and text messages from Blink Capital Partners about my loan inquiry at the number provided, including by automated means. Consent is not a condition of any loan or service. Message and data rates may apply; message frequency varies. Reply STOP to opt out or HELP for help. See our <a href="/privacy-policy.html" style="display:inline;">Privacy Policy</a> and <a href="/terms.html" style="display:inline;">Terms</a>.</span>
+            </label>
             <p class="field-note" style="text-align:center;margin-top:12px;">Your information is never sold. A real advisor — not a bot — will follow up.</p>
             <p class="form-status" role="status"></p>
           </form>
@@ -758,6 +768,9 @@ document.addEventListener("DOMContentLoaded", function () {
       el.classList.toggle("done", i < n);
     });
     wizardNav.style.display = n === 0 ? "none" : "flex";
+    // Consent sits with the submit action, not on every step.
+    var consentRow = document.getElementById("sms-consent-row");
+    if (consentRow) consentRow.style.display = n === 4 ? "flex" : "none";
     nextBtn.style.display = n === 4 ? "none" : "inline-flex";
     submitBtn.style.display = n === 4 ? "inline-flex" : "none";
     if (n === 4) buildSummary();
