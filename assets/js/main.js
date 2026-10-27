@@ -132,12 +132,13 @@ document.addEventListener("DOMContentLoaded", function () {
       var endpoint = CRM_FORM_ENDPOINTS[formName ? formName.value : ""];
 
       // Texting consent: send the exact checkbox wording as proof, only when ticked.
-      var consentBox = form.querySelector('[name="sms_consent"]');
+      // The label either wraps the checkbox or points at it with for="".
       var consentText = form.querySelector('[name="sms_consent_text"]');
-      if (consentBox && consentText) {
-        var consentLabel = form.querySelector('label[for="' + consentBox.id + '"]');
-        consentText.value =
-          consentBox.checked && consentLabel ? consentLabel.textContent.replace(/\s+/g, " ").trim() : "";
+      if (consentText) {
+        var consentBox = form.querySelector('[name="sms_consent"]:checked');
+        var consentLabel =
+          consentBox && (consentBox.closest("label") || form.querySelector('label[for="' + consentBox.id + '"]'));
+        consentText.value = consentLabel ? consentLabel.textContent.replace(/\s+/g, " ").trim() : "";
       }
 
       var params = new URLSearchParams();
