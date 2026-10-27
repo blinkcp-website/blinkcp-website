@@ -252,6 +252,11 @@
             <label for="p_message">Tell Us About Your Client Flow</label>
             <textarea id="p_message" name="message" rows="4" placeholder="e.g. types of deals you typically see, how many investor clients you work with, etc."></textarea>
           </div>
+          <div class="consent-check">
+            <input type="checkbox" id="p_sms_consent" name="sms_consent" value="yes">
+            <label for="p_sms_consent">Yes, Blink Capital Partners may send me text messages, including automated marketing messages, about my inquiry and its loan programs at the phone number above. Consent is not a condition of any loan. Message frequency varies. Message &amp; data rates may apply. Reply STOP to opt out or HELP for help. See our <a href="/privacy-policy.html#sms">Privacy Policy</a> and <a href="/terms.html#sms">SMS Terms</a>.</label>
+          </div>
+          <input type="hidden" name="sms_consent_text" value="">
           <button type="submit" class="btn btn-gold btn-block">Submit Partner Application</button>
           <p class="field-note" style="text-align:center;margin-top:12px;">Your information is never sold. A real advisor — not a bot — will follow up.</p>
           <p class="form-status" role="status"></p>

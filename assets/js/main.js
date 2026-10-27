@@ -79,6 +79,15 @@ document.addEventListener("DOMContentLoaded", function () {
       var formName = form.querySelector('[name="form-name"]');
       var endpoint = CRM_FORM_ENDPOINTS[formName ? formName.value : ""];
 
+      // Texting consent: send the exact checkbox wording as proof, only when ticked.
+      var consentBox = form.querySelector('[name="sms_consent"]');
+      var consentText = form.querySelector('[name="sms_consent_text"]');
+      if (consentBox && consentText) {
+        var consentLabel = form.querySelector('label[for="' + consentBox.id + '"]');
+        consentText.value =
+          consentBox.checked && consentLabel ? consentLabel.textContent.replace(/\s+/g, " ").trim() : "";
+      }
+
       var params = new URLSearchParams();
       new FormData(form).forEach(function (value, key) {
         params.append(key, value);
